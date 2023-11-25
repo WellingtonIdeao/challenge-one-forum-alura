@@ -5,6 +5,8 @@ import com.br.alura.forum.domain.curso.Curso;
 import java.time.LocalDateTime;
 
 public record DadosListagemTopico(
+
+        Long id,
         String titulo,
         String messagem,
         LocalDateTime dataCriacao,
@@ -15,7 +17,7 @@ public record DadosListagemTopico(
 
 ) {
     public DadosListagemTopico(Topico topico){
-        this(topico.getTitulo(), topico.getMensagem(), topico.getDataCriacao(),
+        this(topico.getId(),topico.getTitulo(), topico.getMensagem(), topico.getDataCriacao(),
                 topico.getStatus(),topico.getUsuario().getNome(), topico.getCurso().getNome());
     }
 }
