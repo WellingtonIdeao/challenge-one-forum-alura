@@ -1,7 +1,6 @@
 package com.br.alura.forum.controller;
 
 import com.br.alura.forum.domain.ValidacaoException;
-import com.br.alura.forum.domain.curso.Curso;
 import com.br.alura.forum.domain.curso.CursoRepository;
 import com.br.alura.forum.domain.topico.*;
 import com.br.alura.forum.domain.topico.validacoes.cadastro.ValidadorCadastroTopico;
@@ -90,5 +89,13 @@ public class TopicoController {
         topico.atualizarInformacoes(dados);
 
         return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity remover(@PathVariable Long id){
+        var topico = this.topicoRepository.getReferenceById(id);
+        topico.inativar();
+        return ResponseEntity.noContent().build();
     }
 }

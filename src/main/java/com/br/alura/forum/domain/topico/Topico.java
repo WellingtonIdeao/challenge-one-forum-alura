@@ -1,8 +1,5 @@
 package com.br.alura.forum.domain.topico;
 
-//import com.br.alura.forum.domain.curso.Curso;
-//import com.br.alura.forum.domain.resposta.Resposta;
-//import com.br.alura.forum.domain.usuario.Usuario;
 import com.br.alura.forum.domain.curso.Curso;
 import com.br.alura.forum.domain.resposta.Resposta;
 import com.br.alura.forum.domain.usuario.Usuario;
@@ -44,11 +41,14 @@ public class Topico {
 	@OneToMany(mappedBy = "topico")
 	private List<Resposta> respostas = new ArrayList<>();
 
+	private Boolean ativo;
+
 	public Topico(DadosCadastroTopico dados, Usuario usuario, Curso curso) {
 		this.titulo = dados.titulo();
 		this.mensagem = dados.mensagem();
 		this.usuario = usuario;
 		this.curso = curso;
+		this.ativo = true;
 	}
 
 	public void atualizarInformacoes(DadosAtualizacaoTopico dados) {
@@ -67,5 +67,9 @@ public class Topico {
 		if (curso != null) {
 			this.curso = curso;
 		}
+	}
+
+	public void inativar() {
+		this.ativo = false;
 	}
 }

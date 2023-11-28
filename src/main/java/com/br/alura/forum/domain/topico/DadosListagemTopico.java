@@ -1,7 +1,5 @@
 package com.br.alura.forum.domain.topico;
 
-import com.br.alura.forum.domain.curso.Curso;
-
 import java.time.LocalDateTime;
 
 public record DadosListagemTopico(

@@ -19,6 +19,7 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
            SELECT t FROM Topico t
            WHERE (:curso IS NULL OR t.curso.nome = :curso)
            AND (:ano IS NULL OR YEAR(t.dataCriacao) = :ano)
+           AND t.ativo = true
            """)
    Page<Topico> findAllWithFilters(String curso, Integer ano, Pageable paginacao);
 }
