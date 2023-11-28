@@ -1,5 +1,7 @@
 package com.br.alura.forum.controller;
 
+import com.br.alura.forum.domain.ValidacaoException;
+import com.br.alura.forum.domain.curso.Curso;
 import com.br.alura.forum.domain.curso.CursoRepository;
 import com.br.alura.forum.domain.topico.*;
 import com.br.alura.forum.domain.topico.validacoes.cadastro.ValidadorCadastroTopico;
@@ -37,8 +39,14 @@ public class TopicoController {
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTopico dados, UriComponentsBuilder uriBuild) {
         this.validadoresCadastro.forEach(v -> v.validar(dados));
 
-        var usuario = this.usuarioRepository.getReferenceById(dados.usuario());
-        var curso = this.cursoRepository.getReferenceById(dados.curso());
+        if(!usuarioRepository.existsByNome(dados.usuario())){
+            throw new ValidacaoException("Usuário não cadastrado");
+        }
+        if(!cursoRepository.existsByNome(dados.curso())){
+            throw new ValidacaoException("Curso não cadastrado");
+        }
+        var usuario = this.usuarioRepository.findByNome(dados.usuario());
+        var curso = this.cursoRepository.findByNome(dados.curso());
         var topico = new Topico(dados, usuario, curso);
 
         this.topicoRepository.save(topico);
@@ -57,7 +65,30 @@ public class TopicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id){
+        if(!topicoRepository.existsById(id)){
+            throw new ValidacaoException("Tópico não encontrado");
+        }
         var topico = this.topicoRepository.getReferenceById(id);
+        return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity atualizar(@PathVariable Long id, @RequestBody DadosAtualizacaoTopico dados){
+        if(!topicoRepository.existsById(id)){
+            throw new ValidacaoException("Tópico não encontrado");
+        }
+        var topico = this.topicoRepository.getReferenceById(id);
+
+        if(dados.curso() != null){
+            var curso = this.cursoRepository.findByNome(dados.curso());
+            if(curso == null){
+                throw new ValidacaoException("Curso informado não existe, informe um curso válido!");
+            }
+            topico.atualizarCurso(curso);
+        }
+        topico.atualizarInformacoes(dados);
+
         return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
     }
 }

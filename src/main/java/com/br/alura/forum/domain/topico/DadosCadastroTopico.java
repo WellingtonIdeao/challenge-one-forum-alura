@@ -10,7 +10,7 @@ public record DadosCadastroTopico(
         @NotBlank
         String mensagem,
         @NotNull
-        Long usuario,
+        String usuario,
         @NotNull
-        Long curso) {
+        String curso) {
 }
