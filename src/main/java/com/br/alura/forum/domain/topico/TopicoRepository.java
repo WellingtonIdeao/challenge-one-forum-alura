@@ -22,4 +22,14 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
            AND t.ativo = true
            """)
    Page<Topico> findAllWithFilters(String curso, Integer ano, Pageable paginacao);
+
+   @Query("""
+           SELECT
+           CASE
+                WHEN (COUNT(*) > 0) THEN true
+                ELSE false
+           END
+           FROM Topico t WHERE t.id = :id AND t.ativo = true
+           """)
+    Boolean existsByIdAndAtivoTrue(Long id);
 }
