@@ -22,8 +22,8 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTopico dados, UriComponentsBuilder uriBuild) {
-        var topico = this.topicoService.cadastrar(dados);
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTopico dados, @RequestHeader(name="Authorization") String headerToken, UriComponentsBuilder uriBuild) {
+        var topico = this.topicoService.cadastrar(dados, headerToken);
         var uri = uriBuild.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new DadosDetalhamentoTopico(topico));
