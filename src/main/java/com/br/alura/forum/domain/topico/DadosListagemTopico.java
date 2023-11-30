@@ -1,5 +1,7 @@
 package com.br.alura.forum.domain.topico;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public record DadosListagemTopico(
@@ -7,6 +9,7 @@ public record DadosListagemTopico(
         Long id,
         String titulo,
         String messagem,
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
         LocalDateTime dataCriacao,
         StatusTopico status,
         String autor,
